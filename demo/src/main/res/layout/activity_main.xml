@@ -4,17 +4,21 @@
     android:layout_height="match_parent"
     android:clipChildren="false">
 
-    <com.flurgle.shadowkit.ShadowLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.flurgle.shadowkit.ShadowLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
-        android:clipChildren="false">
+        android:clipChildren="false"
+        app:skShadowAlpha="0.66"
+        app:skShadowColor="#000000"
+        app:skShadowDx="0dp"
+        app:skShadowDy="0dp"
+        app:skShadowRadius="15">
 
         <View
-            android:layout_width="250dp"
-            android:layout_height="120dp"
-            android:alpha="0.33"
-            android:background="@color/colorAccent" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circle" />
 
     </com.flurgle.shadowkit.ShadowLayout>
 
