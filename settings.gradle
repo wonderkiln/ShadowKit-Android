@@ -1,1 +1,1 @@
-include ':app', ':shadowkit'
+include ':demo', ':shadowkit'
