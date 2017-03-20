@@ -12,6 +12,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
+        lintOptions {
+            abortOnError false
+        }
     }
     buildTypes {
         release {
