@@ -11,8 +11,8 @@
         android:clipChildren="false"
         app:skShadowAlpha="0.66"
         app:skShadowColor="#cc000000"
-        app:skShadowDx="2dp"
-        app:skShadowDy="2dp"
+        app:skShadowDx="0dp"
+        app:skShadowDy="0dp"
         app:skShadowRadius="25"
         app:skShadowScale="1">
 

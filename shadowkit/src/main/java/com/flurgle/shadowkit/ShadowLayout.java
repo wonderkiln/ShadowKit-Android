@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -30,6 +31,8 @@ public class ShadowLayout extends FrameLayout {
     private float mShadowScale;
 
     private ImageView mImageView;
+
+    private boolean mDoneSetup = false;
 
     public ShadowLayout(Context context) {
         this(context, null);
@@ -68,18 +71,25 @@ public class ShadowLayout extends FrameLayout {
         setShadowAlpha(mShadowAlpha);
         setShadowRadius(mShadowRadius);
         setShadowScale(mShadowScale);
+
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                invalidate();
+            }
+        });
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        if (changed) {
-            try {
-                Bitmap bitmap = ShadowKit.getBitmapForView(this, PERCENT_PADDING);
-                bitmap = ShadowKit.blur(bitmap, mShadowRadius);
-                mImageView.setImageBitmap(bitmap);
-            } catch (Exception e) {
-            }
+    public void invalidate() {
+        super.invalidate();
+        try {
+            Bitmap bitmap = ShadowKit.getBitmapForView(ShadowLayout.this, PERCENT_PADDING);
+            bitmap = ShadowKit.blur(bitmap, mShadowRadius);
+            mImageView.setImageBitmap(bitmap);
+            mDoneSetup = true;
+        } catch (Exception e) {
         }
     }
 
