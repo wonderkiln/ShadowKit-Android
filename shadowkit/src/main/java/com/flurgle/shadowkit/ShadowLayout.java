@@ -20,12 +20,14 @@ public class ShadowLayout extends FrameLayout {
     private static final int DEFAULT_SHADOW_COLOR = Color.argb(0, 0, 0, 0);
     private static final float DEFAULT_SHADOW_ALPHA = 0.66f;
     private static final int DEFAULT_SHADOW_RADIUS = 0;
+    private static final int DEFAULT_SHADOW_SCALE = 1;
 
     private int mShadowDx;
     private int mShadowDy;
     private int mShadowColor;
     private float mShadowAlpha;
     private int mShadowRadius;
+    private float mShadowScale;
 
     private ImageView mImageView;
 
@@ -51,14 +53,13 @@ public class ShadowLayout extends FrameLayout {
             mShadowColor = a.getColor(R.styleable.ShadowLayout_skShadowColor, DEFAULT_SHADOW_COLOR);
             mShadowAlpha = a.getFloat(R.styleable.ShadowLayout_skShadowAlpha, DEFAULT_SHADOW_ALPHA);
             mShadowRadius = a.getInteger(R.styleable.ShadowLayout_skShadowRadius, DEFAULT_SHADOW_RADIUS);
+            mShadowScale = a.getFloat(R.styleable.ShadowLayout_skShadowScale, DEFAULT_SHADOW_SCALE);
         } finally {
             a.recycle();
         }
 
         mImageView = new ImageView(context);
         mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        mImageView.setScaleX(PERCENT_PADDING * 2 + 1);
-        mImageView.setScaleY(PERCENT_PADDING * 2 + 1);
         addView(mImageView);
 
         setShadowDx(mShadowDx);
@@ -66,6 +67,7 @@ public class ShadowLayout extends FrameLayout {
         setShadowColor(mShadowColor);
         setShadowAlpha(mShadowAlpha);
         setShadowRadius(mShadowRadius);
+        setShadowScale(mShadowScale);
     }
 
     @Override
@@ -76,7 +78,6 @@ public class ShadowLayout extends FrameLayout {
                 Bitmap bitmap = ShadowKit.getBitmapForView(this, PERCENT_PADDING);
                 bitmap = ShadowKit.blur(bitmap, mShadowRadius);
                 mImageView.setImageBitmap(bitmap);
-                Log.v("ShadowKit", "hitttt");
             } catch (Exception e) {
             }
         }
@@ -104,6 +105,12 @@ public class ShadowLayout extends FrameLayout {
 
     public void setShadowRadius(int shadowRadius) {
         this.mShadowRadius = shadowRadius;
+    }
+
+    public void setShadowScale(float shadowScale) {
+        this.mShadowScale = shadowScale;
+        mImageView.setScaleX((PERCENT_PADDING * 2 + 1) * mShadowScale);
+        mImageView.setScaleY((PERCENT_PADDING * 2 + 1) * mShadowScale);
     }
 
 }

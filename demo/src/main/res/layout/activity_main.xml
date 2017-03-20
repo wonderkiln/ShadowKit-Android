@@ -10,10 +10,11 @@
         android:layout_gravity="center"
         android:clipChildren="false"
         app:skShadowAlpha="0.66"
-        app:skShadowColor="#000000"
-        app:skShadowDx="0dp"
-        app:skShadowDy="0dp"
-        app:skShadowRadius="15">
+        app:skShadowColor="#cc000000"
+        app:skShadowDx="2dp"
+        app:skShadowDy="2dp"
+        app:skShadowRadius="25"
+        app:skShadowScale="1">
 
         <View
             android:layout_width="match_parent"
