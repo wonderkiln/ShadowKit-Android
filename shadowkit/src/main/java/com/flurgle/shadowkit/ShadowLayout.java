@@ -6,8 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -31,8 +30,6 @@ public class ShadowLayout extends FrameLayout {
     private float mShadowScale;
 
     private ImageView mImageView;
-
-    private boolean mDoneSetup = false;
 
     public ShadowLayout(Context context) {
         this(context, null);
@@ -84,11 +81,26 @@ public class ShadowLayout extends FrameLayout {
     @Override
     public void invalidate() {
         super.invalidate();
+        mImageView.setVisibility(GONE);
         try {
             Bitmap bitmap = ShadowKit.getBitmapForView(ShadowLayout.this, PERCENT_PADDING);
             bitmap = ShadowKit.blur(bitmap, mShadowRadius);
             mImageView.setImageBitmap(bitmap);
-            mDoneSetup = true;
+            mImageView.setVisibility(VISIBLE);
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        traverseViewTreeDisablingClipping(this);
+    }
+
+    private void traverseViewTreeDisablingClipping(ViewGroup viewGroup) {
+        viewGroup.setClipChildren(false);
+        try {
+            traverseViewTreeDisablingClipping((ViewGroup) viewGroup.getParent());
         } catch (Exception e) {
         }
     }
