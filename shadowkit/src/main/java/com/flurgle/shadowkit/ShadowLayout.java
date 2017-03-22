@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 public class ShadowLayout extends FrameLayout {
 
-    private static final float PERCENT_PADDING = 0.10f;
+    private static final float PERCENT_PADDING = 0.25f;
 
     private static final int DEFAULT_SHADOW_DX = 0;
     private static final int DEFAULT_SHADOW_DY = 0;
@@ -59,6 +59,7 @@ public class ShadowLayout extends FrameLayout {
         }
 
         mImageView = new ImageView(context);
+        mImageView.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
         mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         addView(mImageView);
 
@@ -89,6 +90,12 @@ public class ShadowLayout extends FrameLayout {
             mImageView.setVisibility(VISIBLE);
         } catch (Exception e) {
         }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mImageView.setLayoutParams(new FrameLayout.LayoutParams(w, h));
     }
 
     @Override
