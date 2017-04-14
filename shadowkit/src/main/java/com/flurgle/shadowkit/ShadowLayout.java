@@ -85,9 +85,20 @@ public class ShadowLayout extends FrameLayout {
         mImageView.setVisibility(GONE);
         try {
             Bitmap bitmap = ShadowKit.getBitmapForView(ShadowLayout.this, PERCENT_PADDING);
-            bitmap = ShadowKit.blur(bitmap, mShadowRadius);
-            mImageView.setImageBitmap(bitmap);
-            mImageView.setVisibility(VISIBLE);
+            ShadowKit.blur(bitmap, mShadowRadius, new ShadowKit.OnBlurListener() {
+                @Override
+                public void onBlur(final Bitmap bitmap) {
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mImageView.setImageBitmap(bitmap);
+                            mImageView.setAlpha(0f);
+                            mImageView.setVisibility(VISIBLE);
+                            mImageView.animate().alpha(1).setDuration(300).start();
+                        }
+                    });
+                }
+            });
         } catch (Exception e) {
         }
     }

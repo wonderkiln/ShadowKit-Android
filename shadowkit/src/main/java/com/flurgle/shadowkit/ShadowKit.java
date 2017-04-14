@@ -3,7 +3,6 @@ package com.flurgle.shadowkit;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
@@ -19,16 +18,22 @@ public class ShadowKit {
         renderScript = RenderScript.create(context);
     }
 
-    public static Bitmap blur(Bitmap src, int radius) {
-        final Allocation input = Allocation.createFromBitmap(renderScript, src);
-        final Allocation output = Allocation.createTyped(renderScript, input.getType());
-        final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+    public static void blur(final Bitmap src, final int radius, final OnBlurListener onBlurListener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Allocation input = Allocation.createFromBitmap(renderScript, src);
+                final Allocation output = Allocation.createTyped(renderScript, input.getType());
+                final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
 
-        script.setRadius(radius);
-        script.setInput(input);
-        script.forEach(output);
-        output.copyTo(src);
-        return src;
+                script.setRadius(radius);
+                script.setInput(input);
+                script.forEach(output);
+                output.copyTo(src);
+
+                onBlurListener.onBlur(src);
+            }
+        }).start();
     }
 
     public static Bitmap getBitmapForView(View src, float percentPadding) {
@@ -57,6 +62,10 @@ public class ShadowKit {
         );
 
         return bitmap;
+    }
+
+    public interface OnBlurListener {
+        void onBlur(Bitmap bitmap);
     }
 
 }
