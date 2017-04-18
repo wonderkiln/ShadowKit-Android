@@ -76,14 +76,12 @@ public class ShadowLayout extends FrameLayout {
             @Override
             public void onGlobalLayout() {
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                invalidate();
+                refresh();
             }
         });
     }
 
-    @Override
-    public void invalidate() {
-        super.invalidate();
+    public void refresh() {
         if (mReuseKey != null) {
             Cache.getShadow(mReuseKey, new Cache.BitmapCallback() {
                 @Override
