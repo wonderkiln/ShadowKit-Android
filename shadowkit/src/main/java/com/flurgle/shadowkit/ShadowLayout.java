@@ -28,6 +28,7 @@ public class ShadowLayout extends FrameLayout {
     private float mShadowAlpha;
     private int mShadowRadius;
     private float mShadowScale;
+    private String mReuseKey;
 
     private ImageView mImageView;
 
@@ -54,6 +55,7 @@ public class ShadowLayout extends FrameLayout {
             mShadowAlpha = a.getFloat(R.styleable.ShadowLayout_skShadowAlpha, DEFAULT_SHADOW_ALPHA);
             mShadowRadius = a.getInteger(R.styleable.ShadowLayout_skShadowRadius, DEFAULT_SHADOW_RADIUS);
             mShadowScale = a.getFloat(R.styleable.ShadowLayout_skShadowScale, DEFAULT_SHADOW_SCALE);
+            mReuseKey = a.getString(R.styleable.ShadowLayout_skReuseKey);
         } finally {
             a.recycle();
         }
@@ -82,6 +84,36 @@ public class ShadowLayout extends FrameLayout {
     @Override
     public void invalidate() {
         super.invalidate();
+        if (mReuseKey != null) {
+            Cache.getShadow(mReuseKey, new Cache.BitmapCallback() {
+                @Override
+                public void bitmapReady(Bitmap bitmap) {
+                    mImageView.setImageBitmap(bitmap);
+                }
+
+                @Override
+                public void createBitmap() {
+                    try {
+                        Bitmap bitmap = ShadowKit.getBitmapForView(ShadowLayout.this, PERCENT_PADDING);
+                        ShadowKit.blur(bitmap, mShadowRadius, new ShadowKit.OnBlurListener() {
+                            @Override
+                            public void onBlur(final Bitmap bitmap) {
+                                post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Cache.setShadow(mReuseKey, bitmap);
+                                    }
+                                });
+                            }
+                        });
+                    } catch (Exception e) {
+                    }
+                }
+            });
+
+            return;
+        }
+
         mImageView.setVisibility(GONE);
         try {
             Bitmap bitmap = ShadowKit.getBitmapForView(ShadowLayout.this, PERCENT_PADDING);
@@ -92,9 +124,7 @@ public class ShadowLayout extends FrameLayout {
                         @Override
                         public void run() {
                             mImageView.setImageBitmap(bitmap);
-                            mImageView.setAlpha(0f);
                             mImageView.setVisibility(VISIBLE);
-                            mImageView.animate().alpha(1).setDuration(300).start();
                         }
                     });
                 }
@@ -144,7 +174,10 @@ public class ShadowLayout extends FrameLayout {
     }
 
     public void setShadowRadius(int shadowRadius) {
-        this.mShadowRadius = shadowRadius;
+        this.mShadowRadius =
+                shadowRadius < 1 ? 1
+                        : shadowRadius > 25 ? 25
+                        : shadowRadius;
     }
 
     public void setShadowScale(float shadowScale) {

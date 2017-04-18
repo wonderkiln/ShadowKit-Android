@@ -8,6 +8,7 @@
         <attr name="skShadowAlpha" format="float" />
         <attr name="skShadowRadius" format="integer" />
         <attr name="skShadowScale" format="float" />
+        <attr name="skReuseKey" format="string" />
     </declare-styleable>
 
 </resources>

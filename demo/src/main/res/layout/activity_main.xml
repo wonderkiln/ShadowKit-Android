@@ -6,7 +6,45 @@
     <com.flurgle.shadowkit.ShadowLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"
+        app:skReuseKey="key"
+        app:skShadowAlpha="0.66"
+        app:skShadowColor="#cc000000"
+        app:skShadowDx="0dp"
+        app:skShadowDy="0dp"
+        app:skShadowRadius="25"
+        app:skShadowScale="1">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circle" />
+
+    </com.flurgle.shadowkit.ShadowLayout>
+
+    <com.flurgle.shadowkit.ShadowLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="120dp"
+        app:skReuseKey="key"
+        app:skShadowAlpha="0.66"
+        app:skShadowColor="#cc000000"
+        app:skShadowDx="0dp"
+        app:skShadowDy="0dp"
+        app:skShadowRadius="25"
+        app:skShadowScale="1">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circle" />
+
+    </com.flurgle.shadowkit.ShadowLayout>
+
+    <com.flurgle.shadowkit.ShadowLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="240dp"
+        app:skReuseKey="key"
         app:skShadowAlpha="0.66"
         app:skShadowColor="#cc000000"
         app:skShadowDx="0dp"
